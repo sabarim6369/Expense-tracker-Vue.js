@@ -1,5 +1,15 @@
  <div class="min-h-screen bg-gradient-to-b from-green-300 to-indigo-600 flex flex-col items-center justify-center px-4 py-10 space-y-8">
+     <!-- Top-right Logout button -->
+  <div class="absolute top-5 right-5">
+    <button
+      @click="logout"
+      class="bg-white text-indigo-700 font-semibold px-4 py-2 rounded-lg shadow hover:bg-gray-100 transition cursor-pointer"
+    >
+      Logout
+    </button>
+  </div>
     <!-- Heading -->
+
     <h1 class="text-white text-5xl font-extrabold drop-shadow">Dashboard</h1>
 
     <!-- Expense Form -->
@@ -24,8 +34,8 @@
           v-model="amount"
           id="amount"
           type="number"
-         max="10"
-         step="2"   
+         
+         step="0.1"   
           placeholder="e.g. 120.50"
           class="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
           required

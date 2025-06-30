@@ -1,67 +1,94 @@
-<div class="bg-gradient-to-b from-green-300 to-indigo-600 min-h-screen flex flex-col items-center justify-center p-6 space-y-6">
-    <h1 class="text-white text-4xl font-bold">Dashboard</h1>
-    <form @submit.prevent="submitExpense" class="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
-      <div class="mb-4">
-        <label for="description" class="block mb-2 font-semibold text-gray-700">Enter description</label>
+ <div class="min-h-screen bg-gradient-to-b from-green-300 to-indigo-600 flex flex-col items-center justify-center px-4 py-10 space-y-8">
+    <!-- Heading -->
+    <h1 class="text-white text-5xl font-extrabold drop-shadow">Dashboard</h1>
+
+    <!-- Expense Form -->
+    <form @submit.prevent="submitExpense" class="bg-white p-6 rounded-2xl shadow-xl w-full max-w-lg space-y-4">
+      <h2 class="text-2xl font-bold text-indigo-700">Add New Expense</h2>
+
+      <div>
+        <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
         <input
-          id="description"
           v-model="description"
+          id="description"
           type="text"
-          placeholder="Expense description"
-          class="w-full border border-black rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          placeholder="e.g. Groceries"
+          class="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
           required
         />
       </div>
 
-      <div class="mb-4">
-        <label for="amount" class="block mb-2 font-semibold text-gray-700">Enter amount</label>
+      <div>
+        <label for="amount" class="block text-sm font-medium text-gray-700 mb-1">Amount</label>
         <input
+          v-model="amount"
           id="amount"
-          v-model.number="amount"
           type="number"
-          min="0.01"
-          step="0.01"
-          placeholder="Expense amount"
-          class="w-full border border-black rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+         max="10"
+         step="2"   
+          placeholder="e.g. 120.50"
+          class="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
           required
         />
       </div>
 
       <button
         type="submit"
-        class="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition"
+        class="w-full bg-indigo-600 text-white font-semibold py-2 rounded-md hover:bg-indigo-700 transition"
       >
         Add Expense
       </button>
-      
     </form>
-   <div>
-  <div class="font-bold text-white text-2xl mb-4">Recent Expenses</div>
-  
-  <div v-if="lastthreeexpenses.length > 0" class="w-full max-w-md bg-white rounded-lg shadow p-4 space-y-3">
-    <div
-      v-for="(expense, index) in lastthreeexpenses"
-      :key="expense.id || index"
-      class="flex justify-between border-b border-gray-200 pb-2 last:border-0"
-    >
-      <div class="text-gray-800 font-medium">{{ expense.description }}</div>
-      <div class="text-indigo-600 font-semibold">${{ expense.amount.toFixed(2) }}</div>
+
+    <!-- Recent Expenses -->
+    <div class="w-full max-w-lg space-y-4">
+      <h2 class="text-white text-2xl font-semibold">Recent Expenses</h2>
+
+      <div v-if="lastthreeexpenses.length > 0" class="bg-white p-4 rounded-lg shadow space-y-2">
+        <div
+          v-for="(expense, index) in lastthreeexpenses"
+          :key="expense.id || index"
+          class="flex justify-between items-center border-b last:border-none pb-2"
+        >
+          <div class="text-gray-800">{{ expense.description }}</div>
+          <div class="text-indigo-600 font-semibold">${{ expense.amount.toFixed(2) }}</div>
+        </div>
+      </div>
+
+      <div v-else class="text-white">No expenses available</div>
+
+      <div class="flex justify-center">
+        <button
+          @click="openpopup = true"
+          class="bg-pink-500 hover:bg-pink-600 text-white font-semibold px-6 py-2 rounded-lg transition"
+        >
+          Show All
+        </button>
+      </div>
     </div>
-  </div>
 
-  <div v-else class="text-white">No expenses available</div>
-   <button class="cursor-pointer mt-5 p-4 bg-pink-400 rounded-xl" v-on:click="openpopup=true">Show all</button>
-<div v-if="openpopup" class="fixed inset-0  bg-black flex justify-center items-center bg-opacity-50 z-50">
-     <div class="bg-red-300 w-full max-w-md p-6 rounded-lg shadow-lg text-center">
-    <h2 class="text-xl font-bold mb-4">Popup</h2>
-   <div v-for="(availableexpenses,index) in availableexpenses" :key="index">{{availableexpenses}}</div>
-    <button @click="openpopup = false" class="mt-4 px-4 py-2 bg-red-500 text-white rounded cursor-pointer">
-      Close
-    </button>
-  </div>
+    <!-- Popup -->
+    <div
+      v-if="openpopup"
+      class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+    >
+      <div class="bg-white w-full max-w-lg p-6 rounded-2xl shadow-2xl text-center space-y-4">
+        <h2 class="text-2xl font-bold text-red-600">All Expenses</h2>
 
-</div>
-</div>
+        <div
+          v-for="(available, index) in availableexpenses"
+          :key="index"
+          class="text-gray-800 border-b last:border-none py-2"
+        >
+          {{ available }}
+        </div>
 
-
+        <button
+          @click="openpopup = false"
+          class="mt-4 px-5 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition"
+        >
+          Close
+        </button>
+      </div>
+    </div>
   </div>

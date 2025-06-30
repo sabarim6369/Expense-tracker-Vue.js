@@ -1,0 +1,67 @@
+<div class="bg-gradient-to-b from-green-300 to-indigo-600 min-h-screen flex flex-col items-center justify-center p-6 space-y-6">
+    <h1 class="text-white text-4xl font-bold">Dashboard</h1>
+    <form @submit.prevent="submitExpense" class="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
+      <div class="mb-4">
+        <label for="description" class="block mb-2 font-semibold text-gray-700">Enter description</label>
+        <input
+          id="description"
+          v-model="description"
+          type="text"
+          placeholder="Expense description"
+          class="w-full border border-black rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          required
+        />
+      </div>
+
+      <div class="mb-4">
+        <label for="amount" class="block mb-2 font-semibold text-gray-700">Enter amount</label>
+        <input
+          id="amount"
+          v-model.number="amount"
+          type="number"
+          min="0.01"
+          step="0.01"
+          placeholder="Expense amount"
+          class="w-full border border-black rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          required
+        />
+      </div>
+
+      <button
+        type="submit"
+        class="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition"
+      >
+        Add Expense
+      </button>
+      
+    </form>
+   <div>
+  <div class="font-bold text-white text-2xl mb-4">Recent Expenses</div>
+  
+  <div v-if="lastthreeexpenses.length > 0" class="w-full max-w-md bg-white rounded-lg shadow p-4 space-y-3">
+    <div
+      v-for="(expense, index) in lastthreeexpenses"
+      :key="expense.id || index"
+      class="flex justify-between border-b border-gray-200 pb-2 last:border-0"
+    >
+      <div class="text-gray-800 font-medium">{{ expense.description }}</div>
+      <div class="text-indigo-600 font-semibold">${{ expense.amount.toFixed(2) }}</div>
+    </div>
+  </div>
+
+  <div v-else class="text-white">No expenses available</div>
+   <button class="cursor-pointer mt-5 p-4 bg-pink-400 rounded-xl" v-on:click="openpopup=true">Show all</button>
+<div v-if="openpopup" class="fixed inset-0  bg-black flex justify-center items-center bg-opacity-50 z-50">
+     <div class="bg-red-300 w-full max-w-md p-6 rounded-lg shadow-lg text-center">
+    <h2 class="text-xl font-bold mb-4">Popup</h2>
+   <div v-for="(availableexpenses,index) in availableexpenses" :key="index">{{availableexpenses}}</div>
+    <button @click="openpopup = false" class="mt-4 px-4 py-2 bg-red-500 text-white rounded cursor-pointer">
+      Close
+    </button>
+  </div>
+
+</div>
+</div>
+
+
+  </div>
